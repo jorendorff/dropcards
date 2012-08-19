@@ -4,6 +4,7 @@
     <title>tumblocks</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style>
+      body, html { overflow: hidden; }  /* Don't scroll. */
       div#play {
           text-align: center;
       }
@@ -26,8 +27,52 @@
     <script src="jquery-1.8.0.min.js"></script>
     <script>
       $(function () {
+        // Make a copy of the given card, superimposed exactly over the card,
+        // then set up an animation so that the copy drops off the screen
+        // and disappears.
+        function dropCopyOfCard(card) {
+          var copy = $(card).clone();
+
+          // Since the copy will not be in the same position within the document,
+          // we need to position it absolutely in order to put it precisely
+          // on top of the existing card.
+          var pos = $(card).offset();
+          copy.css({
+            display: "block",
+            position: "absolute",
+            left: (pos.left - 9) + "px",
+            top: (pos.top - 9) + "px"
+          });
+
+          copy.appendTo("body");
+          copy.animate({ top: "800px" }, {
+            duration: 500,
+            complete: function () {
+              $(this).remove();
+            }
+          });
+        }
+
+        var letters = [
+          ['b', 'c', 'd', 'f', 'g', 'h', 'j'],
+          ['a', 'e', 'i', 'o', 'u'],
+          ['b', 'd', 'g', 'm', 'n', 'p', 't']
+        ];
+        function changeCard(card) {
+          var id = $("#play div.card").index(card);
+          console.log(id);
+          var current = $(card).text();
+          var choices = letters[id];
+          var k = Math.floor(Math.random() * (choices.length - 1));
+          var next = choices[k];
+          if (next == current)
+              next = choices[choices.length - 1];
+          $(card).text(next);
+        }
+
         $(".card").live().mousemove(function () {
-          $(this).text("Q");
+          dropCopyOfCard(this);
+          changeCard(this);
         });
       });
     </script>
