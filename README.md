@@ -1,14 +1,10 @@
 dropcards
 =========
 
-Letter cards for reading fun
+I know a certain 4-year-old who is just learning how to read. This toy is for us to share.
 
+Would you please help make it better?
 
-To do
------
+Does it need friendlier colors? Would it be more natural if the cards were a little crooked? Should it show more real words and fewer nonsense words? Should it respond to touch?
 
-- sweeten up the "drop" animation
-- make the sizes right (hard)
-- test on iPad, make touch events work or whatever
-- make it possible to type in a word you want
-- make space bar drop a ton of cards, just for goofs
+Let me know.

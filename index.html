@@ -61,7 +61,7 @@
 
           // var rotation = "+=" + Math.floor(30 * Math.random() - 15) + "deg";
           copy.animate({
-            top: "800px"
+            top: "1000px"
           }, {
             duration: 800,
             complete: function () {
@@ -108,8 +108,10 @@
             'oo-sk', 'oo-ss', 'oo-tch',
             // Combinations to avoid because they're naughty words:
             'b-i-tch', 'cl-i-t', 'c-u-m', 'c-u-nt', 'f-u-ck', 'sh-i-t', 'sh-a-t'
-            // obviously once you decide to censor a word, your work is never done.
-            // "boob" and "poop" and so on aren't naughty enough to ban.
+            // "boob" and "poop" and some others aren't really naughty enough to ban.
+            // Of course once you decide to censor one word, your work is never done.
+            // Let me just apologize right here for all the ones I have missed.
+            // Send along your favorites.
         ];
 
         function shouldAvoid(cards) {
@@ -157,6 +159,7 @@
     </script>
   </head>
   <body>
+    <a href="https://github.com/jorendorff/dropcards/"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
     <div id="play">
       <div class="card">&nbsp;</div>
       <div class="card">&nbsp;</div>
