@@ -49,13 +49,13 @@
             left: (pos.left - 9) + "px",
             top: (pos.top - 9) + "px"
           });
-          copy.appendTo("body");
+          copy.prependTo("#dropping");
 
           // var rotation = "+=" + Math.floor(30 * Math.random() - 15) + "deg";
           copy.animate({
             top: "800px"
           }, {
-            duration: 500,
+            duration: 800,
             complete: function () {
               $(this).remove();
             }
@@ -144,5 +144,6 @@
       <div class="card">o</div>
       <div class="card">x</div>
     </div>
+    <div id="dropping"></div>
   </body>
 </html>
