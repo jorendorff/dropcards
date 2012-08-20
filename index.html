@@ -7,27 +7,35 @@
       @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900);
       body, html { overflow: hidden; }  /* Don't scroll. */
       body {
+        font-family: Source Sans Pro, sans-serif;
         background-color: #eeeeee;
+        font-size: 18px;
       }
       div#play {
-          padding-top: 8%;
-          text-align: center;
+        padding-top: 8%;
+        text-align: center;
       }
       div.card {
-          display: inline-block;
-          width: 1.6em;
-          font-size: 144px;
-          background-color: white;
-          color: black;
-          margin: 9px;
-          text-align: center;
-          font-family: Source Sans Pro, sans-serif;
-          font-weight: 900;
-          padding-top: 40px;
-          padding-bottom: 30px;
-          border: 1px solid #bbb;
-          box-shadow: 6px 6px 10px #ccc;
-          border-radius: 12px;
+        display: inline-block;
+        width: 1.6em;
+        font-size: 144px;
+        background-color: white;
+        color: black;
+        margin: 9px;
+        text-align: center;
+        font-weight: 900;
+        padding-top: 40px;
+        padding-bottom: 30px;
+        border: 1px solid #bbb;
+        box-shadow: 6px 6px 10px #ccc;
+        border-radius: 12px;
+      }
+      div#options {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        width: 10em;
+        text-align: right;
       }
     </style>
     <script src="jquery-1.8.0.min.js"></script>
@@ -63,10 +71,17 @@
         }
 
         var colors = [
-          '#6B1319', '#08475C', '#081d91', '#3D187F', '#447406',
+          '#7B1319', '#08475C', '#242d91', '#3D187F', '#447406',
           '#D29600', '#994900'];
 
-        var letters = [
+        var singleLetterCardSet = [
+          ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'l', 'm',
+           'n', 'p', 'r', 's', 't', 'v', 'w', 'z'],
+          ['a', 'e', 'i', 'o', 'u'],
+          ['b', 'd', 'g', 'k', 'm', 'n', 'p', 't', 'x']
+        ];
+
+        var fullCardSet = [
           ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'l', 'm',
            'n', 'p', 'r', 's', 't', 'v', 'w', 'z',
            'bl', 'br', 'ch', 'cl', 'cr', 'fl', 'fr',
@@ -82,16 +97,18 @@
         // boob and poop aren't naughty enough to ban
         var avoid = [
             // Combinations to avoid because they don't normally occur in
-            // short English words. This excludes "cel" and "hemp" but that's OK;
-            // the main thing is to make the word look plausible, not to be able
-            // to make every possible word.
-            'c-e',
+            // short English words. Avoiding 'c-e' and 'e-mp' rules out
+            // "cel" and "temp", but that's OK; the main thing is to make
+            // each word look like English, not to be able to make every
+            // possible word.
+            'c-e', 'c-i',
             'a-k', 'e-k', 'i-k', 'o-k', 'u-k',
             'e-mp', 'e-g', 'e-p',
             'ee-g', 'ee-x', 'ee-ck', 'ee-fg', 'ee-mp', 'ee-nd', 'ee-sk', 'ee-tch',
             'oo-g', 'oo-x', 'oo-ck', 'oo-fg', 'oo-mp', 'oo-nd', 'oo-sk', 'oo-tch',
             // Combinations to avoid because they're naughty words:
-            'c-u-m', 'f-u-ck', 'sh-i-t', 'sh-a-t', 'b-i-tch'
+            'b-i-tch', 'cl-i-t', 'c-u-m', 'f-u-ck', 'sh-i-t', 'sh-a-t'
+            // obviously once you decide to censor a word, your work is never done.
             // "boob" and "poop" and so on and aren't naughty enough to ban.
         ];
 
@@ -122,7 +139,8 @@
           var cards = $("#play div.card");
           var id = cards.index(card);
           var current = $(card).text();
-          var choices = letters[id];
+          var cardSet = $("input#multi").is(":checked") ? fullCardSet : singleLetterCardSet;
+          var choices = cardSet[id];
           var tries = 0;
           do {
             var next = randomOther(choices, current);
@@ -140,10 +158,13 @@
   </head>
   <body>
     <div id="play">
-      <div class="card">f</div>
-      <div class="card">o</div>
-      <div class="card">x</div>
+      <div class="card">&nbsp;</div>
+      <div class="card">&nbsp;</div>
+      <div class="card">&nbsp;</div>
     </div>
     <div id="dropping"></div>
+    <div id="options">
+      <label>bigger words <input id="multi" type="checkbox"></label>
+    </div>
   </body>
 </html>
