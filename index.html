@@ -4,19 +4,25 @@
     <title>tumblocks</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <style>
+      @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900);
       body, html { overflow: hidden; }  /* Don't scroll. */
+      body {
+        background-color: #eeeeee;
+      }
       div#play {
+          padding-top: 8%;
           text-align: center;
       }
       div.card {
           display: inline-block;
-          width: 150px;
+          width: 1.6em;
           font-size: 144px;
           background-color: white;
           color: black;
           margin: 9px;
           text-align: center;
-          font-family: sans-serif;
+          font-family: Source Sans Pro, sans-serif;
+          font-weight: 900;
           padding-top: 40px;
           padding-bottom: 30px;
           border: 1px solid #bbb;
@@ -43,9 +49,12 @@
             left: (pos.left - 9) + "px",
             top: (pos.top - 9) + "px"
           });
-
           copy.appendTo("body");
-          copy.animate({ top: "800px" }, {
+
+          // var rotation = "+=" + Math.floor(30 * Math.random() - 15) + "deg";
+          copy.animate({
+            top: "800px"
+          }, {
             duration: 500,
             complete: function () {
               $(this).remove();
@@ -53,21 +62,73 @@
           });
         }
 
+        var colors = [
+          '#6B1319', '#08475C', '#081d91', '#3D187F', '#447406',
+          '#D29600', '#994900'];
+
         var letters = [
-          ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'st', 'sh', 'ch', 'fl'],
+          ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'l', 'm',
+           'n', 'p', 'r', 's', 't', 'v', 'w', 'z',
+           'bl', 'br', 'ch', 'cl', 'cr', 'fl', 'fr',
+           'gl', 'gr', 'scr', 'sh', 'sk', 'sm', 'sp', 'st', 'sw',
+           'th', 'thr', 'tr'],
           ['a', 'e', 'i', 'o', 'u', 'ee', 'oo'],
-          ['b', 'd', 'g', 'm', 'n', 'p', 't', 'x', 'mp']
+          ['b', 'd', 'g', 'k', 'm', 'n', 'p', 't', 'x',
+           'ck', 'ft', 'mp', 'nd', 'sh', 'sk', 'st', 'tch']
         ];
+
+        // Combinations to avoid because they're naughty words:
+        //   cum, shit, shat, bitch
+        // boob and poop aren't naughty enough to ban
+        var avoid = [
+            // Combinations to avoid because they don't normally occur in
+            // short English words. This excludes "cel" and "hemp" but that's OK;
+            // the main thing is to make the word look plausible, not to be able
+            // to make every possible word.
+            'c-e',
+            'a-k', 'e-k', 'i-k', 'o-k', 'u-k',
+            'e-mp', 'e-g', 'e-p',
+            'ee-g', 'ee-x', 'ee-ck', 'ee-fg', 'ee-mp', 'ee-nd', 'ee-sk', 'ee-tch',
+            'oo-g', 'oo-x', 'oo-ck', 'oo-fg', 'oo-mp', 'oo-nd', 'oo-sk', 'oo-tch',
+            // Combinations to avoid because they're naughty words:
+            'c-u-m', 'f-u-ck', 'sh-i-t', 'sh-a-t', 'b-i-tch'
+            // "boob" and "poop" and so on and aren't naughty enough to ban.
+        ];
+
+        function shouldAvoid(cards) {
+          var text = [];
+          cards.each(function () { text.push($(this).text()); });
+          return avoid.indexOf(text[0] + '-' + text[1]) !== -1 ||
+                 avoid.indexOf(text[1] + '-' + text[2]) !== -1 ||
+                 avoid.indexOf(text[0] + '-' + text[1] + '-' + text[2]) !== -1;
+        }
+
+        // Return a randomly chosen element of items.
+        function randomChoice(items) {
+          return items[Math.floor(Math.random() * items.length)];
+        }
+
+        // Return an element of items at random, but not current.
+        // Assumes that 'current' is an element of 'items'.
+        function randomOther(items, current) {
+          var k = Math.floor(Math.random() * (items.length - 1));
+          var choice = items[k];
+          if (choice === current)
+            choice = items[items.length - 1];
+          return choice;
+        }
+
         function changeCard(card) {
-          var id = $("#play div.card").index(card);
-          console.log(id);
+          var cards = $("#play div.card");
+          var id = cards.index(card);
           var current = $(card).text();
           var choices = letters[id];
-          var k = Math.floor(Math.random() * (choices.length - 1));
-          var next = choices[k];
-          if (next == current)
-              next = choices[choices.length - 1];
-          $(card).text(next);
+          var tries = 0;
+          do {
+            var next = randomOther(choices, current);
+            $(card).text(next);
+          } while (shouldAvoid(cards) && ++tries < 10);
+          card.style.color = randomChoice(colors);
         }
 
         $(".card").live().mousemove(function () {
