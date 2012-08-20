@@ -30,6 +30,10 @@
         box-shadow: 6px 6px 10px #ccc;
         border-radius: 12px;
       }
+      div#dropping div.card {
+        display: block;
+        margin: 0;
+      }
       div#options {
         position: absolute;
         top: 3px;
@@ -52,11 +56,15 @@
           // on top of the existing card.
           var pos = $(card).offset();
           copy.css({
-            display: "block",
             position: "absolute",
-            left: (pos.left - 9) + "px",
-            top: (pos.top - 9) + "px"
+            left: pos.left + "px",
+            top: pos.top + "px"
           });
+
+          // The document can contain many cards at once; we use just the right
+          // document order to make sure that newly dropped cards are drawn
+          // behind previously dropped cards that are still falling, but atop
+          // the fixed card. That's why prependTo, not appendTo, is right here.
           copy.prependTo("#dropping");
 
           copy.animate({
