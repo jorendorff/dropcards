@@ -171,10 +171,11 @@
           card.style.color = randomChoice(colors);
         }
 
-        $(".card").live().mousemove(function () {
+        function handleMouseEvent() {
           dropCopyOfCard(this);
           changeCard(this);
-        });
+        }
+        $(".card").live().click(handleMouseEvent).mousemove(handleMouseEvent);
       });
     </script>
   </head>
