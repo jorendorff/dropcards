@@ -20,6 +20,12 @@
       @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,900);
       body, html { overflow: hidden; }  /* Don't scroll. */
       body {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: 0;
         font-family: Source Sans Pro, sans-serif;
         background-color: #eeeeee;
         font-size: 18px;
@@ -122,7 +128,7 @@
             'c-e', 'c-i',
             'a-k', 'e-k', 'i-k', 'o-k', 'u-k',
             'a-l', 'e-l', 'i-l', 'o-l', 'u-l',
-            'e-mp', 'e-g', 'e-p',
+            'e-mp', 'e-p',
             'ai-b', 'ai-g', 'ai-k', 'ai-p', 'ai-x',
             'ai-ck', 'ai-ft', 'ai-mp', 'ai-nd', 'ai-sh', 'ai-sk', 'ai-ss', 'ai-tch',
             'ee-g', 'ee-x', 'ee-ck', 'ee-ft', 'ee-mp', 'ee-nd', 'ee-nt',
@@ -178,7 +184,26 @@
           dropCopyOfCard(this);
           changeCard(this);
         }
-        $(".card").live().click(handleMouseEvent).mousemove(handleMouseEvent);
+        function handleTouchEvent(event) {
+          $("#alert").text("touch!");
+          event.preventDefault();
+          for (var i = 0; i < event.touches.length; i++) {
+            var touch = event.touches[i];
+            let target = touch.target;
+              $("#alert").text("touch target: " + (target.id ? "#" + target.id + " " : "")
+                               + (target.className ? "." + target.className : ""));
+            if (target.className == "card" && target.parentNode.id == "play") {
+              handleMouseEvent.call(target);
+            }
+          }
+        }
+        $(".card").click(handleMouseEvent).mousemove(handleMouseEvent);
+        $(".card").each((_, card) => {
+          card.addEventListener("touchstart", handleTouchEvent, false);
+          card.addEventListener("touchmove", handleTouchEvent, false);
+        });
+        document.body.addEventListener("touchstart", handleTouchEvent, false);
+        document.body.addEventListener("touchmove", handleTouchEvent, false);
       });
     </script>
   </head>
@@ -200,5 +225,6 @@
     <div id="options">
       <label>bigger words <input id="multi" type="checkbox"></label>
     </div>
+    <div id="alert"></div>
   </body>
 </html>
